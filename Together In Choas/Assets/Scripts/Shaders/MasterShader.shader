@@ -36,13 +36,23 @@ Shader "Unlit/MasterShader"
 
             sampler2D _MainTex;
             static const float EDGE_WIDTH = 0.06;
+            static const int PREALLOC_AMOUNT = 20;
 
+            int _NumColourNodes;
+            float4 _ColourNodeData[PREALLOC_AMOUNT];
 
-            // SDF for basic sphere
-            float sphereSD(float3 pos)
+            // Basic SDF calc for a sphere
+            float sphereSD(float3 pos, float4 colourSource)
             {
-                float4 sphere = float4(0,0,0,3.);
-                return distance(pos, float3(sphere.xyz)) - sphere.w;
+                return distance(pos, float3(colourSource.xyz)) - colourSource.w; 
+            }
+            // Returns the signed distance of the nearest colour source
+            float colourSD(float3 pos)
+            {
+                float nearestSD = 9999999.0;
+                for (int i = 0; i < _NumColourNodes; i++)
+                    nearestSD = min(nearestSD, sphereSD(pos, _ColourNodeData[i]));
+                return nearestSD;
             }
 
             v2f vert (appdata v)
@@ -62,10 +72,9 @@ Shader "Unlit/MasterShader"
                 // sample the texture
                 fixed4 col = tex2D(_MainTex, i.uv);
 
-                // Calc SD Value
-                float outSD = sphereSD(i.worldPos.xyz);
-
-                if (outSD < 0.0) // If within SDF of point return col
+                // Calc SD Value to determine if we're in colour, edge, or desaturated
+                float outSD = colourSD(i.worldPos.xyz);
+                if (outSD < 0.0) // within SDF of point return col
                 {
                     return col;
                 }
