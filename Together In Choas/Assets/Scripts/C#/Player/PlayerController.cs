@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         tf = GetComponent<Transform>();
-        dataIndex = ColourRestorationManager.Instance.packAndUpdateNodeData(ref tf, colourRadius);
+        dataIndex = ColourRestorationManager.Instance.PackAndUpdateNodeData(ref tf, colourRadius);
     }
 
     void Update()
@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
         {
             rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
 
-            ColourRestorationManager.Instance.packAndUpdateNodeData(ref tf, colourRadius, dataIndex);
+            ColourRestorationManager.Instance.PackAndUpdateNodeData(ref tf, colourRadius, dataIndex);
         }
     }
 }

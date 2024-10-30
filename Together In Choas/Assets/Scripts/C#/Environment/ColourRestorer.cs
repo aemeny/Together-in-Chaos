@@ -9,11 +9,11 @@ public class ColourRestorer : MonoBehaviour
     void Start()
     {
         tf = GetComponent<Transform>();
-        dataIndex = ColourRestorationManager.Instance.packAndUpdateNodeData(ref tf, colourRadius);
+        dataIndex = ColourRestorationManager.Instance.PackAndUpdateNodeData(ref tf, colourRadius);
     }
 
     void Update()
     {
-        ColourRestorationManager.Instance.packAndUpdateNodeData(ref tf, colourRadius, dataIndex);
+        ColourRestorationManager.Instance.PackAndUpdateNodeData(ref tf, colourRadius, dataIndex);
     }
 }

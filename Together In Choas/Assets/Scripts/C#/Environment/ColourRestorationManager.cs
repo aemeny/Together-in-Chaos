@@ -28,18 +28,19 @@ public class ColourRestorationManager : MonoBehaviour
         Shader.SetGlobalInt("PREALLOC_AMOUNT", MAX_ARRAY_SIZE);
     }
 
-    public int packAndUpdateNodeData(ref Transform _transform, float _radius, int _index = -1)
+    // Packs transform and sphere radius in to a Vec4 to be sent to the shader. Returns new index if needed
+    public int PackAndUpdateNodeData(ref Transform _transform, float _radius, int _index = -1)
     {
         Vector4 packedData = new Vector4(_transform.position.x, _transform.position.y, _transform.position.z, _radius);
 
         if (_index == -1)
-            return initValColourNodeData(ref packedData);
+            return InitValColourNodeData(ref packedData);
        
-        setValColourNodeData(ref packedData, _index);
+        SetValColourNodeData(ref packedData, _index);
         return -1; 
     }
 
-    private void setValColourNodeData(ref Vector4 _nodeData, int _index)
+    private void SetValColourNodeData(ref Vector4 _nodeData, int _index)
     {
         if (_index >= colourNodeData.Length)
         {
@@ -50,7 +51,7 @@ public class ColourRestorationManager : MonoBehaviour
         updated = true;
     }
 
-    private int initValColourNodeData(ref Vector4 _nodeData)
+    private int InitValColourNodeData(ref Vector4 _nodeData)
     {
         colourNodeData = colourNodeData.Append<Vector4>(_nodeData).ToArray();
         updated = true;
